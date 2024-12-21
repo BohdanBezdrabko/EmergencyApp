@@ -1,0 +1,26 @@
+### Create a new Event
+POST http://localhost:8080/api/events
+Content-Type: application/json
+
+{
+  "location": "Downtown",
+  "type": "Fire",
+  "time": "2024-12-20T15:30:00",
+  "dangerLevel": "High"
+}
+###
+GET http://localhost:8080/api/events/1
+
+###
+PUT http://localhost:8080/api/events/1
+Content-Type: application/json
+
+{
+  "location": "Hightown",
+  "type": "Bombs",
+  "time": "2024-12-20T18:00:00",
+  "dangerLevel": "Medium"
+}
+
+###
+DELETE http://localhost:8080/api/events/2
