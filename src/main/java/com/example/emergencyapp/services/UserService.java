@@ -1,5 +1,7 @@
 package com.example.emergencyapp.services;
 
+import com.example.emergencyapp.DTO.UserRequestDto;
+import com.example.emergencyapp.DTO.UserResponseDto;
 import com.example.emergencyapp.models.User;
 import com.example.emergencyapp.repositories.UserRepository;
 import org.springframework.stereotype.Service;
@@ -14,21 +16,27 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User createUser(User user) {
-        return userRepository.save(user);
+    public UserResponseDto createUser(UserRequestDto userRequestDto) {
+        User user = new User();
+        user.setFirstName(userRequestDto.getFirstName());
+        user.setLastName(userRequestDto.getLastName());
+        user.setRole(userRequestDto.getRole());
+        User savedUser = userRepository.save(user);
+        return mapToResponseDto(savedUser);
     }
 
-    public Optional<User> getUserById(Long id) {
-        return userRepository.findById(id);
+    public Optional<UserResponseDto> getUserById(Long id) {
+        return userRepository.findById(id).map(this::mapToResponseDto);
     }
 
-    public User updateUser(Long id, User updatedUser) {
+    public UserResponseDto updateUser(Long id, UserRequestDto userRequestDto) {
         return userRepository.findById(id)
                 .map(user -> {
-                    user.setFirstName(updatedUser.getFirstName());
-                    user.setLastName(updatedUser.getLastName());
-                    user.setRole(updatedUser.getRole());
-                    return userRepository.save(user);
+                    user.setFirstName(userRequestDto.getFirstName());
+                    user.setLastName(userRequestDto.getLastName());
+                    user.setRole(userRequestDto.getRole());
+                    User updatedUser = userRepository.save(user);
+                    return mapToResponseDto(updatedUser);
                 })
                 .orElseThrow(() -> new RuntimeException("User with ID " + id + " not found."));
     }
@@ -39,5 +47,14 @@ public class UserService {
         } else {
             throw new RuntimeException("User with ID " + id + " not found.");
         }
+    }
+
+    private UserResponseDto mapToResponseDto(User user) {
+        UserResponseDto responseDto = new UserResponseDto();
+        responseDto.setId(user.getId());
+        responseDto.setFirstName(user.getFirstName());
+        responseDto.setLastName(user.getLastName());
+        responseDto.setRole(user.getRole());
+        return responseDto;
     }
 }

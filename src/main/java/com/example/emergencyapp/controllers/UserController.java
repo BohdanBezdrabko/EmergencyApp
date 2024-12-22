@@ -1,6 +1,8 @@
+// UserController.java
 package com.example.emergencyapp.controllers;
 
-import com.example.emergencyapp.models.User;
+import com.example.emergencyapp.DTO.UserRequestDto;
+import com.example.emergencyapp.DTO.UserResponseDto;
 import com.example.emergencyapp.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,24 +20,25 @@ public class UserController {
 
     // Create User
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        return ResponseEntity.ok(userService.createUser(user));
+    public ResponseEntity<UserResponseDto> createUser(@RequestBody UserRequestDto userRequestDto) {
+        UserResponseDto createdUser = userService.createUser(userRequestDto);
+        return ResponseEntity.ok(createdUser);
     }
 
     // Get User by ID
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        Optional<User> user = userService.getUserById(id);
+    public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long id) {
+        Optional<UserResponseDto> user = userService.getUserById(id);
         return user.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     // Update User
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
+    public ResponseEntity<UserResponseDto> updateUser(@PathVariable Long id, @RequestBody UserRequestDto userRequestDto) {
         try {
-            User user = userService.updateUser(id, updatedUser);
-            return ResponseEntity.ok(user);
+            UserResponseDto updatedUser = userService.updateUser(id, userRequestDto);
+            return ResponseEntity.ok(updatedUser);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }

@@ -6,8 +6,7 @@ import com.example.emergencyapp.models.Event;
 import com.example.emergencyapp.repositories.EventRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
+
 
 import java.time.LocalDateTime;
 import java.util.Optional;
