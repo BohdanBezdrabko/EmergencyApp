@@ -1,5 +1,7 @@
 package com.example.emergencyapp.services;
 
+import com.example.emergencyapp.DTO.EventRequestDto;
+import com.example.emergencyapp.DTO.EventResponseDto;
 import com.example.emergencyapp.models.Event;
 import com.example.emergencyapp.repositories.EventRepository;
 import org.springframework.stereotype.Service;
@@ -14,22 +16,30 @@ public class EventService {
         this.eventRepository = eventRepository;
     }
 
-    public Event createEvent(Event event) {
-        return eventRepository.save(event);
+    public EventResponseDto createEvent(EventRequestDto eventRequest) {
+        Event event = new Event();
+        event.setLocation(eventRequest.getLocation());
+        event.setType(eventRequest.getType());
+        event.setTime(eventRequest.getTime());
+        event.setDangerLevel(eventRequest.getDangerLevel());
+        Event savedEvent = eventRepository.save(event);
+
+        return mapToResponseDto(savedEvent);
     }
 
-    public Optional<Event> getEventById(Long id) {
-        return eventRepository.findById(id);
+    public Optional<EventResponseDto> getEventById(Long id) {
+        return eventRepository.findById(id).map(this::mapToResponseDto);
     }
 
-    public Event updateEvent(Long id, Event updatedEvent) {
+    public EventResponseDto updateEvent(Long id, EventRequestDto eventRequest) {
         return eventRepository.findById(id)
                 .map(event -> {
-                    event.setLocation(updatedEvent.getLocation());
-                    event.setType(updatedEvent.getType());
-                    event.setTime(updatedEvent.getTime());
-                    event.setDangerLevel(updatedEvent.getDangerLevel());
-                    return eventRepository.save(event);
+                    event.setLocation(eventRequest.getLocation());
+                    event.setType(eventRequest.getType());
+                    event.setTime(eventRequest.getTime());
+                    event.setDangerLevel(eventRequest.getDangerLevel());
+                    Event updatedEvent = eventRepository.save(event);
+                    return mapToResponseDto(updatedEvent);
                 })
                 .orElseThrow(() -> new RuntimeException("Event with ID " + id + " not found."));
     }
@@ -40,5 +50,15 @@ public class EventService {
         } else {
             throw new RuntimeException("Event with ID " + id + " not found.");
         }
+    }
+
+    private EventResponseDto mapToResponseDto(Event event) {
+        EventResponseDto responseDTO = new EventResponseDto();
+        responseDTO.setId(event.getId());
+        responseDTO.setLocation(event.getLocation());
+        responseDTO.setType(event.getType());
+        responseDTO.setTime(event.getTime());
+        responseDTO.setDangerLevel(event.getDangerLevel());
+        return responseDTO;
     }
 }

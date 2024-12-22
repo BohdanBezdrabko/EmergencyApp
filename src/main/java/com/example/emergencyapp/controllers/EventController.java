@@ -1,6 +1,7 @@
 package com.example.emergencyapp.controllers;
 
-import com.example.emergencyapp.models.Event;
+import com.example.emergencyapp.DTO.EventRequestDto;
+import com.example.emergencyapp.DTO.EventResponseDto;
 import com.example.emergencyapp.services.EventService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,32 +17,28 @@ public class EventController {
         this.eventService = eventService;
     }
 
-    // Create Event
     @PostMapping
-    public ResponseEntity<Event> createEvent(@RequestBody Event event) {
-        return ResponseEntity.ok(eventService.createEvent(event));
+    public ResponseEntity<EventResponseDto> createEvent(@RequestBody EventRequestDto eventRequest) {
+        return ResponseEntity.ok(eventService.createEvent(eventRequest));
     }
 
-    // Get Event by ID
     @GetMapping("/{id}")
-    public ResponseEntity<Event> getEventById(@PathVariable Long id) {
-        Optional<Event> event = eventService.getEventById(id);
+    public ResponseEntity<EventResponseDto> getEventById(@PathVariable Long id) {
+        Optional<EventResponseDto> event = eventService.getEventById(id);
         return event.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Update Event
     @PutMapping("/{id}")
-    public ResponseEntity<Event> updateEvent(@PathVariable Long id, @RequestBody Event updatedEvent) {
+    public ResponseEntity<EventResponseDto> updateEvent(@PathVariable Long id, @RequestBody EventRequestDto eventRequest) {
         try {
-            Event event = eventService.updateEvent(id, updatedEvent);
-            return ResponseEntity.ok(event);
+            EventResponseDto updatedEvent = eventService.updateEvent(id, eventRequest);
+            return ResponseEntity.ok(updatedEvent);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    // Delete Event
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEvent(@PathVariable Long id) {
         try {

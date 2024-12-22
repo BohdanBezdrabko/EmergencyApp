@@ -1,32 +1,14 @@
-package com.example.emergencyapp.models;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+package com.example.emergencyapp.DTO;
 
 import java.time.LocalDateTime;
 
-@Entity
-public class Event {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class EventRequestDto {
     private String location;
     private String type;
-    private LocalDateTime time;
+    private LocalDateTime time; // Передача дати у вигляді String
     private String dangerLevel;
 
     // Getters and Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getLocation() {
         return location;
     }
