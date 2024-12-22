@@ -16,7 +16,7 @@ public class EventController {
         this.eventService = eventService;
     }
 
-    // Create Event (Already implemented previously)
+    // Create Event
     @PostMapping
     public ResponseEntity<Event> createEvent(@RequestBody Event event) {
         return ResponseEntity.ok(eventService.createEvent(event));
