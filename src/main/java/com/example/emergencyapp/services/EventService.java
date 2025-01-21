@@ -4,6 +4,7 @@ import com.example.emergencyapp.DTO.EventRequestDto;
 import com.example.emergencyapp.DTO.EventResponseDto;
 import com.example.emergencyapp.models.Event;
 import com.example.emergencyapp.repositories.EventRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -11,7 +12,7 @@ import java.util.Optional;
 @Service
 public class EventService {
     private final EventRepository eventRepository;
-
+@Autowired
     public EventService(EventRepository eventRepository) {
         this.eventRepository = eventRepository;
     }
